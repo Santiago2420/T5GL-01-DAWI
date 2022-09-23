@@ -6,7 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
+import lombok.Builder.Default;
 import model.Categoria;
 import model.Producto;
 import model.Proveedor;
@@ -25,6 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
+import javax.swing.JTable;
 
 public class FrmManteProd extends JFrame {
 
@@ -37,7 +40,10 @@ public class FrmManteProd extends JFrame {
 	private JTextField txtDescripcion;
 	private JTextField txtStock;
 	private JTextField txtPrecio;
-
+	private JTable tblSalida;
+	
+	
+   DefaultTableModel modelo = new DefaultTableModel();
 	/**
 	 * Launch the application.
 	 */
@@ -60,7 +66,7 @@ public class FrmManteProd extends JFrame {
 	public FrmManteProd() {
 		setTitle("Mantenimiento de Productos");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 390);
+		setBounds(100, 100, 450, 550);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -151,7 +157,19 @@ public class FrmManteProd extends JFrame {
 		});
 		btnBuscar.setBounds(324, 63, 89, 23);
 		contentPane.add(btnBuscar);
-
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 357, 414, 143);
+		contentPane.add(scrollPane_1);
+		
+		tblSalida = new JTable();
+		scrollPane_1.setViewportView(tblSalida);
+		tblSalida.setModel(modelo);
+		modelo.addColumn("Codigo");
+		modelo.addColumn("Nombre");
+		modelo.addColumn("Categoria");
+		modelo.addColumn("Proveedor");
+		
 		llenaCombo();
 	}
 
@@ -257,7 +275,7 @@ public class FrmManteProd extends JFrame {
 				// mostrar el listado en el txt Area
 
 				for (Producto p : lstProductos) {
-
+					// MUESTRA EN EL TEXT AREA
 					imprimir("Id Producto..: " + p.getId_prod());
 
 					imprimir("Nombre.......: " + p.getDes_prod());
@@ -271,6 +289,11 @@ public class FrmManteProd extends JFrame {
 							p.getIdprovedor() + "-" + p.getProveedor().getNombre_rs());
 
 					imprimir("------------------------------------------------");
+					// muesta en la tabla
+					Object datos[]= {p.getId_prod(), p.getDes_prod(), p.getIdcategoria() + "-" + p.getCategoria().getDescripcion(),
+							p.getIdprovedor() + "-" + p.getProveedor().getNombre_rs()};
+					
+					modelo.addRow(datos);
 
 				}
 		
